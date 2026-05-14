@@ -4,12 +4,6 @@ export interface Env {
   TELEGRAM_CHAT_ID: string;
 }
 
-export interface Category {
-  id: string;
-  slug: string;
-  label: string;
-  parent_id: string | null;
-}
 
 export interface Byline {
   id: string;
@@ -21,5 +15,4 @@ export interface SubmitData {
   entradilla: string;
   cuerpo: string;
   imagen_sugerida: string;
-  categoria_id: string;
 }

@@ -1,29 +1,8 @@
-import type { Category } from "./types";
+const BG = "oklch(0.88 0.085 241)";   // base-950 al 50% de intensidad
+const TEXT = "#1a1a1a";
+const BORDER_FOCUS = "#1a1a1a";
 
-function buildCategoryOptions(categories: Category[]): string {
-  const roots = categories.filter((c) => !c.parent_id);
-  const children = categories.filter((c) => c.parent_id);
-
-  let html = "";
-  for (const root of roots) {
-    html += `<option value="${root.id}">${root.label}</option>`;
-    for (const child of children.filter((c) => c.parent_id === root.id)) {
-      html += `<option value="${child.id}">&nbsp;&nbsp;↳ ${child.label}</option>`;
-    }
-  }
-  return html;
-}
-
-const CYAN = "oklch(0.7 0.17 241)";
-const DARK = "#0d1f2d";
-const WHITE = "#ffffff";
-const INPUT_BG = "rgba(255,255,255,0.92)";
-
-export function renderForm(
-  authorName: string,
-  categories: Category[],
-  error?: string
-): string {
+export function renderForm(authorName: string, error?: string): string {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,20 +10,20 @@ export function renderForm(
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Escribus — TuPeriódico</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: ${CYAN};
-      color: ${WHITE};
+      font-family: 'Domine', Georgia, serif;
+      background: ${BG};
+      color: ${TEXT};
       min-height: 100vh;
       padding: 2.5rem 1rem;
     }
     .container { max-width: 680px; margin: 0 auto; }
 
     header {
-      border-bottom: 2px solid ${WHITE};
+      border-bottom: 2px solid ${TEXT};
       padding-bottom: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -54,18 +33,17 @@ export function renderForm(
       font-size: 1.6rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: ${WHITE};
     }
     header p {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
-      color: rgba(255,255,255,0.75);
+      color: #444;
       margin-top: 0.25rem;
     }
     .author-badge {
       display: inline-block;
-      background: ${WHITE};
-      color: ${CYAN};
+      background: ${TEXT};
+      color: ${BG};
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       font-size: 0.75rem;
@@ -75,14 +53,14 @@ export function renderForm(
     }
 
     .intro {
-      background: rgba(255,255,255,0.12);
-      border-left: 3px solid ${WHITE};
+      background: rgba(255,255,255,0.5);
+      border-left: 3px solid ${TEXT};
       padding: 1rem 1.2rem;
       margin-bottom: 2rem;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.9rem;
       line-height: 1.6;
-      color: ${WHITE};
+      color: ${TEXT};
     }
     .intro strong { font-weight: 700; }
 
@@ -94,37 +72,40 @@ export function renderForm(
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: ${WHITE};
+      color: ${TEXT};
       margin-bottom: 0.4rem;
     }
-    input[type="text"], textarea, select {
+    input[type="text"], textarea {
       width: 100%;
-      border: none;
-      background: ${INPUT_BG};
-      font-family: Georgia, serif;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.75);
+      font-family: 'Domine', Georgia, serif;
       font-size: 1rem;
       padding: 0.65rem 0.9rem;
-      color: ${DARK};
-      appearance: none;
+      color: ${TEXT};
     }
-    input[type="text"]:focus, textarea:focus, select:focus {
-      outline: 3px solid ${WHITE};
+    input[type="text"]:focus, textarea:focus {
+      outline: 2px solid ${BORDER_FOCUS};
       outline-offset: 0;
+      background: rgba(255,255,255,0.95);
+    }
+    input[type="text"]::placeholder, textarea::placeholder {
+      font-size: 13px;
+      color: #777;
     }
     textarea { resize: vertical; line-height: 1.6; }
-    textarea#cuerpo { min-height: 280px; font-size: 0.95rem; }
-    textarea#imagen_sugerida { min-height: 60px; font-size: 0.9rem; }
-    select { cursor: pointer; }
+    textarea#cuerpo { min-height: 280px; }
+    textarea#imagen_sugerida { min-height: 60px; }
     .hint {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.75rem;
-      color: rgba(255,255,255,0.7);
+      color: #555;
       margin-top: 0.35rem;
     }
     .error {
-      background: rgba(200,0,0,0.15);
-      border: 1px solid rgba(255,100,100,0.6);
-      color: #ffd0d0;
+      background: rgba(200,0,0,0.08);
+      border: 1px solid rgba(180,0,0,0.3);
+      color: #900;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
       padding: 0.8rem 1rem;
@@ -132,8 +113,8 @@ export function renderForm(
     }
     button[type="submit"] {
       width: 100%;
-      background: ${DARK};
-      color: ${WHITE};
+      background: ${TEXT};
+      color: #fff;
       border: none;
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
@@ -144,8 +125,8 @@ export function renderForm(
       cursor: pointer;
       margin-top: 0.5rem;
     }
-    button[type="submit"]:hover { background: #1a3a50; }
-    button[type="submit"]:disabled { background: rgba(255,255,255,0.2); cursor: not-allowed; }
+    button[type="submit"]:hover { background: #333; }
+    button[type="submit"]:disabled { background: #999; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -164,8 +145,9 @@ export function renderForm(
 
     <form method="POST" id="form">
       <div class="field">
-        <label for="titulo">Titular *</label>
-        <input type="text" id="titulo" name="titulo" required maxlength="200" />
+        <label for="titulo">Título *</label>
+        <input type="text" id="titulo" name="titulo" required maxlength="200"
+          placeholder="El título del artículo" />
       </div>
 
       <div class="field">
@@ -178,14 +160,6 @@ export function renderForm(
         <label for="cuerpo">Cuerpo del artículo *</label>
         <textarea id="cuerpo" name="cuerpo" required
           placeholder="Escribe el artículo aquí. Separa los párrafos con una línea en blanco."></textarea>
-      </div>
-
-      <div class="field">
-        <label for="categoria_id">Sección *</label>
-        <select id="categoria_id" name="categoria_id" required>
-          <option value="">— Elige una sección —</option>
-          ${buildCategoryOptions(categories)}
-        </select>
       </div>
 
       <div class="field">
@@ -216,12 +190,12 @@ export function renderConfirmacion(authorName: string, titulo: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enviado — TuPeriódico</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Space+Grotesk:wght@700&display=swap" />
   <style>
     body {
       font-family: 'Space Grotesk', sans-serif;
-      background: oklch(0.7 0.17 241);
-      color: #ffffff;
+      background: oklch(0.88 0.085 241);
+      color: #1a1a1a;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -231,14 +205,8 @@ export function renderConfirmacion(authorName: string, titulo: string): string {
     .box { max-width: 480px; text-align: center; }
     .check { font-size: 3rem; margin-bottom: 1rem; }
     h1 { font-weight: 700; font-size: 1.4rem; margin-bottom: 0.5rem; }
-    p { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; line-height: 1.6; }
-    a {
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #ffffff;
-    }
+    p { font-family: 'Domine', serif; font-size: 0.9rem; color: #444; margin-bottom: 1.5rem; line-height: 1.6; }
+    a { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #1a1a1a; }
   </style>
 </head>
 <body>

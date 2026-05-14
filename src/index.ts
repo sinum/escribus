@@ -1,5 +1,5 @@
 import { getEmailFromJwt } from "./auth";
-import { getBylineByEmail, getCategories, insertArticle } from "./db";
+import { getBylineByEmail, insertArticle } from "./db";
 import { notificar } from "./telegram";
 import { renderForm, renderConfirmacion } from "./html";
 import type { Env, SubmitData } from "./types";
@@ -34,8 +34,7 @@ export default {
     }
 
     if (request.method === "GET") {
-      const categories = await getCategories(env);
-      return html(renderForm(byline.display_name, categories));
+      return html(renderForm(byline.display_name));
     }
 
     if (request.method === "POST") {
@@ -46,21 +45,14 @@ export default {
         entradilla: (formData.get("entradilla") as string ?? "").trim(),
         cuerpo: (formData.get("cuerpo") as string ?? "").trim(),
         imagen_sugerida: (formData.get("imagen_sugerida") as string ?? "").trim(),
-        categoria_id: (formData.get("categoria_id") as string ?? "").trim(),
       };
 
-      if (!data.titulo || !data.entradilla || !data.cuerpo || !data.categoria_id) {
-        const categories = await getCategories(env);
-        return html(renderForm(byline.display_name, categories, "Faltan campos obligatorios."));
+      if (!data.titulo || !data.entradilla || !data.cuerpo) {
+        return html(renderForm(byline.display_name, "Faltan campos obligatorios."));
       }
 
       await insertArticle(env, byline, data);
-
-      // Obtener label de categoría para la notificación
-      const categories = await getCategories(env);
-      const categoria = categories.find((c) => c.id === data.categoria_id);
-
-      await notificar(env, byline, data, categoria?.label ?? data.categoria_id);
+      await notificar(env, byline, data);
 
       return html(renderConfirmacion(byline.display_name, data.titulo));
     }

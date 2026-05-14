@@ -1,5 +1,5 @@
 import { ulid } from "ulidx";
-import type { Env, Byline, Category, SubmitData } from "./types";
+import type { Env, Byline, SubmitData } from "./types";
 
 export async function getBylineByEmail(env: Env, email: string): Promise<Byline | null> {
   const row = await env.DB
@@ -15,19 +15,6 @@ export async function getBylineByEmail(env: Env, email: string): Promise<Byline 
   return row ? { id: row.id, display_name: row.display_name } : null;
 }
 
-export async function getCategories(env: Env): Promise<Category[]> {
-  const { results } = await env.DB
-    .prepare(`
-      SELECT id, slug, label, parent_id
-      FROM taxonomies
-      WHERE name = 'category'
-      ORDER BY parent_id NULLS FIRST, label ASC
-    `)
-    .all<Category>();
-
-  return results;
-}
-
 export async function insertArticle(
   env: Env,
   byline: Byline,
@@ -37,7 +24,6 @@ export async function insertArticle(
   const revisionId = ulid();
   const now = new Date().toISOString();
 
-  // Generar slug desde el titular
   const slug = data.titulo
     .toLowerCase()
     .normalize("NFD")
@@ -46,7 +32,6 @@ export async function insertArticle(
     .replace(/^-|-$/g, "")
     .slice(0, 80);
 
-  // Convertir cuerpo de texto plano a PortableText mínimo
   const content = data.cuerpo
     .split(/\n\n+/)
     .filter(Boolean)
@@ -80,11 +65,7 @@ export async function insertArticle(
       postId, slug, data.titulo, data.entradilla,
       JSON.stringify(content), revisionId, byline.id, now, now
     ),
-
-    env.DB.prepare(`
-      INSERT INTO content_taxonomies (collection, entry_id, taxonomy_id)
-      VALUES ('posts', ?, ?)
-    `).bind(postId, data.categoria_id),
+    // La sección se asigna manualmente en EmDash al revisar el draft
   ]);
 
   return postId;
