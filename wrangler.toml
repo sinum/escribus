@@ -23,7 +23,11 @@ persist = true
 head_sampling_rate = 1
 
 
-# Bindings configurados en el dashboard:
-# - D1: DB → lemma-db
-# - Secret: TELEGRAM_TOKEN
-# - Secret: TELEGRAM_CHAT_ID
+[[d1_databases]]
+binding = "DB"
+database_name = "lemma-db"
+database_id = "16ec6c97-4c26-440f-8f27-2283ddc647c9"
+
+# Secrets (configurados en el dashboard):
+# - TELEGRAM_TOKEN
+# - TELEGRAM_CHAT_ID
