@@ -1,0 +1,13 @@
+name = "escribus"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "firmas.tuperiodico.soy", custom_domain = true }
+]
+
+# Bindings configurados en el dashboard:
+# - D1: DB → lemma-db
+# - Secret: TELEGRAM_TOKEN
+# - Secret: TELEGRAM_CHAT_ID
