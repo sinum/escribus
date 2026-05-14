@@ -12,19 +12,11 @@ const err = (msg: string, status = 403) =>
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    // --- PROTECCIÓN CLOUDFLARE ACCESS (reactivar tras pruebas) ---
-    // const email = getEmailFromJwt(request);
-    // if (!email) {
-    //   return err("Acceso no autorizado. Identidad no detectada.", 401);
-    // }
-    // const byline = await getBylineByEmail(env, email);
-    // if (!byline) {
-    //   return err("Tu perfil editorial no está configurado. Contacta con la redacción.", 403);
-    // }
-    // --- FIN PROTECCIÓN ---
+    const email = getEmailFromJwt(request);
+    if (!email) {
+      return err("Acceso no autorizado. Identidad no detectada.", 401);
+    }
 
-    // Bypass temporal para pruebas: email fijo hasta configurar Zero Trust
-    const email = "gorka@sinum.info";
     const byline = await getBylineByEmail(env, email);
     if (!byline) {
       return err(
