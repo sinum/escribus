@@ -1,13 +1,13 @@
-import type { Env, Byline, SubmitData } from "./types";
+import type { Env, SubmitData } from "./types";
 
 export async function notificar(
   env: Env,
-  byline: Byline,
+  email: string,
   data: SubmitData
 ): Promise<void> {
   const mensaje =
     `📝 <b>Nuevo artículo pendiente de revisión</b>\n\n` +
-    `✍️ ${byline.display_name}\n\n` +
+    `✍️ ${email}\n\n` +
     `<b>${data.titulo}</b>\n` +
     `${data.entradilla}\n` +
     (data.imagen_sugerida

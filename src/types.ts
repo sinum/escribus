@@ -5,11 +5,6 @@ export interface Env {
 }
 
 
-export interface Byline {
-  id: string;
-  display_name: string;
-}
-
 export interface SubmitData {
   titulo: string;
   entradilla: string;

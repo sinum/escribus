@@ -1,5 +1,5 @@
 import { getEmailFromJwt } from "./auth";
-import { getBylineByEmail, insertArticle } from "./db";
+import { insertArticle } from "./db";
 import { notificar } from "./telegram";
 import { renderForm, renderConfirmacion } from "./html";
 import type { Env, SubmitData } from "./types";
@@ -17,16 +17,8 @@ export default {
       return err("Acceso no autorizado. Identidad no detectada.", 401);
     }
 
-    const byline = await getBylineByEmail(env, email);
-    if (!byline) {
-      return err(
-        "Tu perfil editorial no está configurado. Contacta con la redacción.",
-        403
-      );
-    }
-
     if (request.method === "GET") {
-      return html(renderForm(byline.display_name));
+      return html(renderForm(email));
     }
 
     if (request.method === "POST") {
@@ -40,13 +32,13 @@ export default {
       };
 
       if (!data.titulo || !data.entradilla || !data.cuerpo) {
-        return html(renderForm(byline.display_name, "Faltan campos obligatorios."));
+        return html(renderForm(email, "Faltan campos obligatorios."));
       }
 
-      await insertArticle(env, byline, data);
-      await notificar(env, byline, data);
+      await insertArticle(env, data);
+      await notificar(env, email, data);
 
-      return html(renderConfirmacion(byline.display_name, data.titulo));
+      return html(renderConfirmacion(email, data.titulo));
     }
 
     return err("Método no permitido.", 405);
