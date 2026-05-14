@@ -7,6 +7,10 @@ routes = [
   { pattern = "firmas.tuperiodico.soy", custom_domain = true }
 ]
 
+[observability.logs]
+enabled = false
+invocation_logs = true
+
 # Bindings configurados en el dashboard:
 # - D1: DB → lemma-db
 # - Secret: TELEGRAM_TOKEN
