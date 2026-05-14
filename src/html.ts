@@ -40,6 +40,12 @@ export function renderForm(authorName: string, error?: string): string {
       color: #444;
       margin-top: 0.25rem;
     }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+    }
     .author-badge {
       display: inline-block;
       background: ${TEXT};
@@ -48,10 +54,22 @@ export function renderForm(authorName: string, error?: string): string {
       font-weight: 700;
       font-size: 0.75rem;
       padding: 0.2rem 0.7rem;
-      margin-top: 0.6rem;
       letter-spacing: 0.04em;
       border-radius: 999px;
     }
+    .logout-btn {
+      display: inline-block;
+      background: #c0392b;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.7rem;
+      letter-spacing: 0.04em;
+      border-radius: 999px;
+      text-decoration: none;
+    }
+    .logout-btn:hover { background: #a93226; }
 
     .intro {
       background: rgba(255,255,255,0.5);
@@ -137,7 +155,10 @@ export function renderForm(authorName: string, error?: string): string {
     <header>
       <h1>Escribus</h1>
       <p>Envío de artículos — TuPeriódico</p>
-      <span class="author-badge">${authorName}</span>
+      <div class="header-meta">
+        <span class="author-badge">${authorName}</span>
+        <a href="/cdn-cgi/access/logout" class="logout-btn">Cerrar sesión</a>
+      </div>
     </header>
 
     <div class="intro">
