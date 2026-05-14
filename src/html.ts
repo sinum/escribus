@@ -50,6 +50,7 @@ export function renderForm(authorName: string, error?: string): string {
       padding: 0.2rem 0.7rem;
       margin-top: 0.6rem;
       letter-spacing: 0.04em;
+      border-radius: 999px;
     }
 
     .intro {
@@ -77,7 +78,8 @@ export function renderForm(authorName: string, error?: string): string {
     }
     input[type="text"], textarea {
       width: 100%;
-      border: 1px solid rgba(0,0,0,0.2);
+      border: none;
+      border-radius: 8px;
       background: rgba(255,255,255,0.75);
       font-family: 'Domine', Georgia, serif;
       font-size: 1rem;
@@ -116,6 +118,7 @@ export function renderForm(authorName: string, error?: string): string {
       background: ${TEXT};
       color: #fff;
       border: none;
+      border-radius: 8px;
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       font-size: 0.9rem;
